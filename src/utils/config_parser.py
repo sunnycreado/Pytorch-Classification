@@ -22,6 +22,6 @@ class ConfigReader():
         else:
             return None
         
-
-config = ConfigReader()
-Data = config.get_value('Data')
+if __name__ == "__main__":
+    config = ConfigReader()
+    Data = config.get_value('Data')

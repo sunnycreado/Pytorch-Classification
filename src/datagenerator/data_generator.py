@@ -14,7 +14,7 @@ class Dot:
         self.color_class = color_class
 
 class DotGeneratorApp:
-    def __init__(self, root):
+    def __init__(self, root,dot_distance):
         self.root = root
         self.canvas = tk.Canvas(self.root, width=800, height=600, bg="white")
         self.canvas.pack()
@@ -39,7 +39,7 @@ class DotGeneratorApp:
         self.x_range = (-1, 1)
         self.y_range = (-1, 1)
 
-        self.dot_distance = 0.03  # Distance between dots
+        self.dot_distance = dot_distance  # Distance between dots
 
     def place_cluster(self, event):
         x = event.x
@@ -101,10 +101,16 @@ class DotGeneratorApp:
         print(f"Data saved to {filename}")
 
 
-root = tk.Tk()
-app = DotGeneratorApp(root)
 
-save_button = tk.Button(root, text="Save to Excel", command=app.save_to_excel)
-save_button.pack(pady=10)
+class GenerateData():
 
-root.mainloop()
+    def start_generator(self,dot_distance):
+        root = tk.Tk()
+        app = DotGeneratorApp(root,dot_distance)
+
+        save_button = tk.Button(root, text="Save to Excel", command=app.save_to_excel)
+        save_button.pack(pady=10)
+
+        root.mainloop()
+
+

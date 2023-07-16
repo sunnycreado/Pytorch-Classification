@@ -1,7 +1,8 @@
 {
-
+    
     "Data": {
-        "filename":"custom_data_1.xlsx"
+        "filename":"custom_data_2.xlsx",
+        "noise":0.03
     },
     "HyperParameters":
     {
