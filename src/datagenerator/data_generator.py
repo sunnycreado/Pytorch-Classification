@@ -14,7 +14,7 @@ class Dot:
         self.color_class = color_class
 
 class DotGeneratorApp:
-    def __init__(self, root,dot_distance):
+    def __init__(self, root, dot_distance):
         self.root = root
         self.canvas = tk.Canvas(self.root, width=800, height=600, bg="white")
         self.canvas.pack()
@@ -41,11 +41,18 @@ class DotGeneratorApp:
 
         self.dot_distance = dot_distance  # Distance between dots
 
+        self.color_classes = {}  # Dictionary to store color classes
+
     def place_cluster(self, event):
         x = event.x
         y = event.y
 
-        color_class = dot_colors.index(self.selected_color["bg"])
+        selected_color = self.selected_color["bg"]
+        if selected_color not in self.color_classes:
+            class_number = len(self.color_classes)
+            self.color_classes[selected_color] = class_number
+
+        color_class = self.color_classes[selected_color]
 
         # Scale the dot coordinates to match the desired range
         dot_x = self.scale_coordinate(x, self.x_range[0], self.x_range[1])
@@ -60,7 +67,7 @@ class DotGeneratorApp:
             canvas_y = self.unscale_coordinate(dot_y, self.y_range[0], self.y_range[1])
 
             self.canvas.create_oval(canvas_x - dot_radius, canvas_y - dot_radius,
-                                    canvas_x + dot_radius, canvas_y + dot_radius, fill=dot_colors[color_class])
+                                    canvas_x + dot_radius, canvas_y + dot_radius, fill=selected_color)
 
             self.dots.append(Dot(dot_x, dot_y, color_class))
 
@@ -101,12 +108,10 @@ class DotGeneratorApp:
         print(f"Data saved to {filename}")
 
 
-
-class GenerateData():
-
-    def start_generator(self,dot_distance):
+class GenerateData:
+    def start_generator(self, dot_distance):
         root = tk.Tk()
-        app = DotGeneratorApp(root,dot_distance)
+        app = DotGeneratorApp(root, dot_distance)
 
         save_button = tk.Button(root, text="Save to Excel", command=app.save_to_excel)
         save_button.pack(pady=10)
@@ -114,3 +119,6 @@ class GenerateData():
         root.mainloop()
 
 
+if __name__ == "__main__":
+    generate_data = GenerateData()
+    generate_data.start_generator(dot_distance=0.03)
