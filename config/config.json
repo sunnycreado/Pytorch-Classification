@@ -1,0 +1,13 @@
+{
+
+    "Data": {
+        "filename":"custom_data_1.xlsx"
+    },
+    "HyperParameters":
+    {
+        "learningrate":0.01,
+        "epochs":100
+    }
+
+}
+  
