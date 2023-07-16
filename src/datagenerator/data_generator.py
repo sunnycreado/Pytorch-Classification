@@ -55,16 +55,16 @@ class DotGeneratorApp:
         color_class = self.color_classes[selected_color]
 
         # Scale the dot coordinates to match the desired range
-        dot_x = self.scale_coordinate(x, self.x_range[0], self.x_range[1])
-        dot_y = self.scale_coordinate(y, self.y_range[0], self.y_range[1])
+        dot_x = self.scale_coordinate(x, 0, self.canvas.winfo_width(), self.x_range[0], self.x_range[1])
+        dot_y = self.scale_coordinate(y, 0, self.canvas.winfo_height(), self.y_range[0], self.y_range[1])
 
         for _ in range(10):
             dot_x += random.uniform(-self.dot_distance, self.dot_distance)  # Add small noise to the x-coordinate
             dot_y += random.uniform(-self.dot_distance, self.dot_distance)  # Add small noise to the y-coordinate
 
             # Unscale the dot coordinates to the canvas range
-            canvas_x = self.unscale_coordinate(dot_x, self.x_range[0], self.x_range[1])
-            canvas_y = self.unscale_coordinate(dot_y, self.y_range[0], self.y_range[1])
+            canvas_x = self.unscale_coordinate(dot_x, self.x_range[0], self.x_range[1], 0, self.canvas.winfo_width())
+            canvas_y = self.unscale_coordinate(dot_y, self.y_range[0], self.y_range[1], 0, self.canvas.winfo_height())
 
             self.canvas.create_oval(canvas_x - dot_radius, canvas_y - dot_radius,
                                     canvas_x + dot_radius, canvas_y + dot_radius, fill=selected_color)
@@ -80,13 +80,11 @@ class DotGeneratorApp:
     def select_color(self, color):
         self.selected_color["bg"] = color
 
-    def scale_coordinate(self, value, min_val, max_val):
-        canvas_width = self.canvas.winfo_width()  # Get the current width of the canvas
-        return (value / canvas_width) * (max_val - min_val) + min_val
+    def scale_coordinate(self, value, min_val, max_val, new_min, new_max):
+        return ((value - min_val) / (max_val - min_val)) * (new_max - new_min) + new_min
 
-    def unscale_coordinate(self, value, min_val, max_val):
-        canvas_width = self.canvas.winfo_width()  # Get the current width of the canvas
-        return (value - min_val) / (max_val - min_val) * canvas_width
+    def unscale_coordinate(self, value, min_val, max_val, new_min, new_max):
+        return ((value - min_val) / (max_val - min_val)) * (new_max - new_min) + new_min
 
     def save_to_excel(self):
         i = 1
@@ -100,8 +98,8 @@ class DotGeneratorApp:
         ws.append(["X", "Y", "Color Class"])
 
         for dot in self.dots:
-            scaled_x = self.scale_coordinate(dot.x, self.x_range[0], self.x_range[1])
-            scaled_y = self.scale_coordinate(dot.y, self.y_range[0], self.y_range[1])
+            scaled_x = self.scale_coordinate(dot.x, self.x_range[0], self.x_range[1], -1, 1)
+            scaled_y = self.scale_coordinate(dot.y, self.y_range[0], self.y_range[1], -1, 1)
             ws.append([scaled_x, scaled_y, dot.color_class])
 
         wb.save(filename)
