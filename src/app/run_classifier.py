@@ -24,8 +24,8 @@ class RunClassifier():
         X,y = transform.acquire_transformed_data(is_binary)        
         data = transform.split_data(X,y)
         model = nn.get_model(is_binary)
-        model=train.train_model(model,data[0],data[2])
-        train.test_model(model,data[1],data[3])
+        model=train.train_model(model,data)
+        # train.test_model(model,data[1],data[3])
         plot_graphs.plot_decision_boundary(model=model,X=data[1],y=data[3])
         
         

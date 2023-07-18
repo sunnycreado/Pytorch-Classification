@@ -10,8 +10,8 @@
     "HyperParameters":
     {
         "learningrate":0.1,
-        "epochs":1500,
-        "RandomState":32  
+        "epochs":500,
+        "RandomState":49  
     }
 
 }

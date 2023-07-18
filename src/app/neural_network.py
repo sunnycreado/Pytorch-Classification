@@ -22,12 +22,10 @@ class NeuralNetwork():
                     self.layers = nn.Sequential(
                         nn.Linear(in_features=2,out_features=16),
                         nn.ReLU(),
-                        nn.Dropout(p=0.2),
-                        nn.Linear(in_features=16,out_features=16),
-                        nn.Linear(in_features=16,out_features=16),
+                        # nn.Dropout(p=0.2),
                         nn.Linear(in_features=16,out_features=16),
                         nn.ReLU(),
-                        nn.Dropout(p=0.2),
+                        # nn.Dropout(p=0.2),
                         nn.Linear(in_features=16,out_features=otherutils.get_classes()),
 
                     )

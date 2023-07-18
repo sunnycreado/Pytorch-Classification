@@ -23,7 +23,9 @@ class Trainer():
         return loss_fn,accuracy_fn,optimizer
 
 
-    def train_model(self,model,X_train,y_train):
+    def train_model(self,model,data):
+
+        X_train,X_test,y_train,y_test = data
 
         is_binary = other_utils.check_classification_type()
 
@@ -50,8 +52,21 @@ class Trainer():
 
                 optimizer.step()
 
+
+                model.eval()
+
+
+                with torch.inference_mode():
+                    test_logits = model(X_test)
+                    test_pred = torch.softmax(test_logits,dim=1).argmax(dim=1)
+
+                    test_loss = loss_fn(test_logits,y_test)
+                    test_acc = accuracy_fn(y_test,test_pred)
+
+
+
                 if epoch%100 == 0 :
-                    print(f'epoch : {epoch},Training Loss: {train_loss},Training Accuracy: {train_acc}')
+                    print(f'epoch : {epoch},Training Loss: {train_loss},Testing Loss: {test_loss},Training Accuracy: {train_acc}, Testing Accuracy: {test_acc}')
 
         return model
 
@@ -59,23 +74,23 @@ class Trainer():
                 
 
 
-    def test_model(self,model,X_test,y_test):
+    # def test_model(self,model,X_test,y_test):
 
-        is_binary = other_utils.check_classification_type()
+    #     is_binary = other_utils.check_classification_type()
 
-        loss_fn,accuracy_fn,optimizer = self.get_functions(is_binary,model)
+    #     loss_fn,accuracy_fn,optimizer = self.get_functions(is_binary,model)
 
-        if not is_binary:
-
-
-            model.eval()
-
-            with torch.inference_mode():
-                test_logits = model(X_test)
-                test_pred = torch.softmax(test_logits,dim=1).argmax(dim=1)
-
-                test_loss = loss_fn(test_logits,y_test)
-                test_acc = accuracy_fn(y_test,test_pred)
+    #     if not is_binary:
 
 
-                print(f'Training Loss: {test_loss},Training Accuracy: {test_acc}')
+    #         model.eval()
+
+    #         with torch.inference_mode():
+    #             test_logits = model(X_test)
+    #             test_pred = torch.softmax(test_logits,dim=1).argmax(dim=1)
+
+    #             test_loss = loss_fn(test_logits,y_test)
+    #             test_acc = accuracy_fn(y_test,test_pred)
+
+
+    #             print(f'Training Loss: {test_loss},Training Accuracy: {test_acc}')
