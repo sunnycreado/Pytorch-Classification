@@ -45,3 +45,5 @@ class PlotGraphs():
         plt.ylim(yy.min(), yy.max())
         model.to(device)
         X, y = X.to(device), y.to(device)
+
+        plt.show()

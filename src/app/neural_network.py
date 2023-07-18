@@ -20,13 +20,16 @@ class NeuralNetwork():
                 def __init__(self) -> None:
                     super().__init__()
                     self.layers = nn.Sequential(
-                        nn.Linear(in_features=2,out_features=8),
+                        nn.Linear(in_features=2,out_features=16),
                         nn.ReLU(),
-                        nn.Linear(in_features=8,out_features=16),
+                        nn.Dropout(p=0.2),
+                        nn.Linear(in_features=16,out_features=16),
+                        nn.Linear(in_features=16,out_features=16),
+                        nn.Linear(in_features=16,out_features=16),
                         nn.ReLU(),
-                        nn.Linear(in_features=16,out_features=8),
-                        nn.ReLU(),
-                        nn.Linear(in_features=8,out_features=otherutils.get_classes())
+                        nn.Dropout(p=0.2),
+                        nn.Linear(in_features=16,out_features=otherutils.get_classes()),
+
                     )
                 
                 def forward(self,x):

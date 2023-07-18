@@ -53,6 +53,8 @@ class Trainer():
                 if epoch%100 == 0 :
                     print(f'epoch : {epoch},Training Loss: {train_loss},Training Accuracy: {train_acc}')
 
+        return model
+
 
                 
 
