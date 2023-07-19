@@ -1,16 +1,16 @@
 {
     
     "Data": {
-        "filename":"custom_data_2.xlsx",
+        "filename":"custom_data_4.xlsx",
         "base_data_path":"data/",
-        "noise":0.03,
-        "test_size":0.1
+        "noise":0.01,
+        "test_size":0.2
                
     },
     "HyperParameters":
     {
         "learningrate":0.1,
-        "epochs":500,
+        "epochs":5000,
         "RandomState":49  
     }
 

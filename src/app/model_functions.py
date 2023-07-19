@@ -31,5 +31,19 @@ class ModelFunction():
     
     def get_optimizer(self,model):
         return torch.optim.SGD(model.parameters(),lr=HYPER_PARAMETERS['learningrate'])
+    
+    def get_pred_from_logits(self,is_binary,logits):
+        if is_binary:
+            return torch.round(torch.sigmoid(logits))
+        else: 
+            return torch.softmax(logits,dim=1).argmax(dim=1)
+        
+    def get_logits(self,is_binary,model,data):
+        if is_binary:
+            return model(data).squeeze()
+        else:
+            return model(data)
+
+
         
 

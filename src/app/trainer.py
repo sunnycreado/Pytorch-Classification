@@ -31,44 +31,88 @@ class Trainer():
 
         loss_fn,accuracy_fn,optimizer = self.get_functions(is_binary,model)
 
-        if not is_binary:
+        # if not is_binary:
 
-            torch.manual_seed(HYPER_PARAMETERS['RandomState'])
-            torch.cuda.manual_seed(HYPER_PARAMETERS['RandomState'])
+        torch.manual_seed(HYPER_PARAMETERS['RandomState'])
+        torch.cuda.manual_seed(HYPER_PARAMETERS['RandomState'])
 
-            for epoch in range(HYPER_PARAMETERS['epochs']):
+        for epoch in range(HYPER_PARAMETERS['epochs']):
 
-                model.train()
+            model.train()
 
-                train_logits = model(X_train)
-                train_pred = torch.softmax(train_logits,dim=1).argmax(dim=1)
+            train_logits = model_function.get_logits(is_binary,model,X_train)
+            train_pred = model_function.get_pred_from_logits(is_binary,train_logits)
 
-                train_loss = loss_fn(train_logits,y_train)
-                train_acc = accuracy_fn(y_train,train_pred)
+            train_loss = loss_fn(train_logits,y_train)
+            train_acc = accuracy_fn(y_train,train_pred)
 
-                optimizer.zero_grad()
+            optimizer.zero_grad()
 
-                train_loss.backward()
+            train_loss.backward()
 
-                optimizer.step()
-
-
-                model.eval()
+            optimizer.step()
 
 
-                with torch.inference_mode():
-                    test_logits = model(X_test)
-                    test_pred = torch.softmax(test_logits,dim=1).argmax(dim=1)
-
-                    test_loss = loss_fn(test_logits,y_test)
-                    test_acc = accuracy_fn(y_test,test_pred)
+            model.eval()
 
 
+            with torch.inference_mode():
+                test_logits = model_function.get_logits(is_binary,model,X_test)
+                test_pred = model_function.get_pred_from_logits(is_binary,test_logits)
 
-                if epoch%100 == 0 :
-                    print(f'epoch : {epoch},Training Loss: {train_loss},Testing Loss: {test_loss},Training Accuracy: {train_acc}, Testing Accuracy: {test_acc}')
+                test_loss = loss_fn(test_logits,y_test)
+                test_acc = accuracy_fn(y_test,test_pred)
+
+
+
+            if epoch%100 == 0 :
+                print(f'epoch : {epoch},Training Loss: {train_loss},Testing Loss: {test_loss},Training Accuracy: {train_acc}, Testing Accuracy: {test_acc}')
+
+            if train_acc>99.5:
+                print(f"Training accuracy is {train_acc}% and Testing Accuracy is {test_acc}% in {epoch} epochs.")
+                break
 
         return model
+        # else:
+
+        #     torch.manual_seed(HYPER_PARAMETERS['RandomState'])
+        #     torch.cuda.manual_seed(HYPER_PARAMETERS['RandomState'])            
+
+        #     for epoch in range(HYPER_PARAMETERS['epochs']):
+
+        #         model.train()
+
+        #         train_logits = model_function.get_logits(is_binary,model,X_train)
+        #         train_pred = model_function.get_pred_from_logits(is_binary,train_logits)
+
+        #         train_loss = loss_fn(train_logits,y_train)
+        #         train_acc = accuracy_fn(y_train,train_pred)
+
+        #         optimizer.zero_grad()
+
+        #         train_loss.backward()
+
+        #         optimizer.step()
+
+
+        #         model.eval()
+
+
+        #         with torch.inference_mode():
+        #             test_logits = model_function.get_logits(is_binary,model,X_test)
+        #             test_pred = model_function.get_pred_from_logits(is_binary,test_logits)
+
+        #             test_loss = loss_fn(test_logits,y_test)
+        #             test_acc = accuracy_fn(y_test,test_pred)
+
+
+
+        #         if epoch%100 == 0 :
+        #             print(f'epoch : {epoch},Training Loss: {train_loss},Testing Loss: {test_loss},Training Accuracy: {train_acc}, Testing Accuracy: {test_acc}')
+
+
+
+        
 
 
                 

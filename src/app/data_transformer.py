@@ -30,6 +30,11 @@ class TransformData():
             X = torch.from_numpy(X).type(torch.float).to(device)
             y = torch.from_numpy(y).type(torch.LongTensor).to(device)
             return X,y
+        else: 
+            X = torch.from_numpy(X).type(torch.float).to(device)
+            y = torch.from_numpy(y).type(torch.float).to(device)
+            return X,y
+
 
     def split_data(self,X,y):
         X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=Data['test_size'],random_state=HYPER_PARAMETERS['RandomState'])

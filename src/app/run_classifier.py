@@ -26,7 +26,7 @@ class RunClassifier():
         model = nn.get_model(is_binary)
         model=train.train_model(model,data)
         # train.test_model(model,data[1],data[3])
-        plot_graphs.plot_decision_boundary(model=model,X=data[1],y=data[3])
+        plot_graphs.plot_decision_boundary(model=model,X=data[1],y=data[3],device=otherutils.get_device())
         
         
         pass
